@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .card {
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .custom-checkbox .custom-control-label::before {
+            border-radius: 0.25rem;
+        }
+
+        .navbar {
+            background-color: #f8f9fa;
+        }
+
+        .navbar-brand {
+            color: #343a40;
+        }
+
+        .btn-outline-primary {
+            border-color: #007bff;
+            color: #007bff;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        @media (min-width: 576px) {
+            .container {
+                max-width: 540px;
+            }
+        }
+        @media (min-width: 768px) {
+            .container {
+                max-width: 720px;
+            }
+        }
+        @media (min-width: 992px) {
+            .container {
+                max-width: 960px;
+            }
+        }
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 1140px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">Product List</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div id="product-list" class="row"></div>
+        <div id="pagination" class="text-center"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        const products = [
+            { name: "Product 1", image: "1.png" },
+            { name: "Product 2", image: "1.png" },
+        ];
+
+        function displayProducts(pageNumber, pageSize) {
+            const productList = document.getElementById("product-list");
+            productList.innerHTML = "";
+
+            const startIndex = (pageNumber - 1) * pageSize;
+            const endIndex = startIndex + pageSize;
+
+            for (let i = startIndex; i < endIndex && i < products.length; i++) {
+                const product = products[i];
+                const card = `
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img src="${product.image}" class="card-img-top" alt="${product.name}">
+                            <div class="card-body">
+                                <h5 class="card-title">${product.name}</h5>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck${i}">
+                                    <label class="custom-control-label" for="customCheck${i}">Add to Cart</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                productList.innerHTML += card;
+            }
+        }
+
+        function generatePagination(totalPages) {
+            const pagination = document.getElementById("pagination");
+            pagination.innerHTML = "";
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageLink = `<button class="btn btn-outline-primary mr-2" onclick="changePage(${i})">${i}</button>`;
+                pagination.innerHTML += pageLink;
+            }
+        }
+
+        function changePage(pageNumber) {
+            const pageSize = 6;
+            displayProducts(pageNumber, pageSize);
+        }
+
+        const pageSize = 6;
+        const totalPages = Math.ceil(products.length / pageSize);
+        generatePagination(totalPages);
+        displayProducts(1, pageSize);
+    </script>
+</body>
+</html>
